@@ -1,57 +1,58 @@
-# Create a Streamlit dashboard file named 'delivery_time_dashboard.py'
-
-streamlit_code = """
 import streamlit as st
 import pandas as pd
-import seaborn as sns
 import matplotlib.pyplot as plt
 
-# Load the dataset
-file_path = 'orders_dataset.csv'  # Adjust this if necessary
-orders_df = pd.read_csv(file_path)
+# Title and Description
+st.title("Proyek Analisis Data")
+st.markdown("""
+### Analisis Data E-Commerce
+Aplikasi ini menampilkan visualisasi dan analisis data dari berbagai dataset yang berkaitan dengan penjualan online.
+""")
 
-# Convert the date columns to datetime format
-orders_df['order_purchase_timestamp'] = pd.to_datetime(orders_df['order_purchase_timestamp'])
-orders_df['order_delivered_customer_date'] = pd.to_datetime(orders_df['order_delivered_customer_date'])
+# Load Datasets
+st.header("Load Datasets")
 
-# Calculate the delivery time in days
-orders_df['delivery_time'] = (orders_df['order_delivered_customer_date'] - orders_df['order_purchase_timestamp']).dt.days
+# Load customers dataset
+customers_df = pd.read_csv('customers_dataset.csv')
+st.subheader("Customers Dataset")
+st.write(customers_df.head())
 
-# Filter out negative delivery times
-orders_df = orders_df[orders_df['delivery_time'] >= 0]
+# Load sellers dataset
+sellers_df = pd.read_csv('sellers_dataset.csv')
+st.subheader("Sellers Dataset")
+st.write(sellers_df.head())
 
-# Calculate average, fastest, and slowest delivery times
-average_delivery_time = orders_df['delivery_time'].mean()
-fastest_delivery_time = orders_df['delivery_time'].min()
-slowest_delivery_time = orders_df['delivery_time'].max()
+# Load products dataset
+products_df = pd.read_csv('products_dataset.csv')
+st.subheader("Products Dataset")
+st.write(products_df.head())
 
-# Streamlit App
-st.title("Delivery Time Analysis Dashboard")
+# Load orders dataset
+orders_df = pd.read_csv('orders_dataset.csv')
+st.subheader("Orders Dataset")
+st.write(orders_df.head())
 
-# Display Metrics
-st.metric("Average Delivery Time (Days)", f"{average_delivery_time:.2f}")
-st.metric("Fastest Delivery Time (Days)", fastest_delivery_time)
-st.metric("Slowest Delivery Time (Days)", slowest_delivery_time)
+# Visualization: Number of Customers by State
+st.header("Visualizations")
 
-# Bar chart visualization
-st.subheader("Delivery Time Comparison")
-delivery_time_df = pd.DataFrame({
-    'Delivery Time': ['Average', 'Fastest', 'Slowest'],
-    'Days': [average_delivery_time, fastest_delivery_time, slowest_delivery_time]
-})
+st.subheader("Jumlah Pembeli Berdasarkan State")
+customer_city = customers_df.groupby(by="customer_state").customer_id.nunique().sort_values(ascending=False)
 
-# Plot the chart
-plt.figure(figsize=(10, 5))
-sns.barplot(x='Delivery Time', y='Days', data=delivery_time_df)
-plt.title('Waktu Pengiriman')
-plt.xlabel('Jenis Waktu Pengiriman')
-plt.ylabel('Hari')
+fig, ax = plt.subplots(figsize=(10, 5))
+customer_city.plot(kind='bar', ax=ax)
+ax.set_title('Jumlah Pembeli Berdasarkan State')
+ax.set_xlabel('State')
+ax.set_ylabel('Jumlah Pembeli')
+ax.set_xticks(range(len(customer_city.index)))
+ax.set_xticklabels(customer_city.index, rotation=90)
+st.pyplot(fig)
 
-# Show the plot in Streamlit
-st.pyplot(plt)
+# Display delivery statistics
+st.subheader("Statistik Waktu Pengiriman")
+average_delivery_time = orders_df['delivery_time_days'].mean()
+fastest_delivery_time = orders_df['delivery_time_days'].min()
+slowest_delivery_time = orders_df['delivery_time_days'].max()
 
-# Show the raw data
-st.subheader("Raw Data")
-st.dataframe(orders_df)
-"""
-
+st.write(f"**Rata-rata Waktu Pengiriman:** {average_delivery_time:.2f} hari")
+st.write(f"**Waktu Pengiriman Tercepat:** {fastest_delivery_time} hari")
+st.write(f"**Waktu Pengiriman Terlama:** {slowest_delivery_time} hari")
