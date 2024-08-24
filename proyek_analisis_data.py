@@ -48,9 +48,9 @@ st.pyplot(fig)
 
 # Display delivery statistics
 st.subheader("Statistik Waktu Pengiriman")
-average_delivery_time = orders_df['delivery_time_days'].mean()
-fastest_delivery_time = orders_df['delivery_time_days'].min()
-slowest_delivery_time = orders_df['delivery_time_days'].max()
+average_delivery_time = orders_df['delivery_time'].mean()
+fastest_delivery_time = orders_df['delivery_time'].min()
+slowest_delivery_time = orders_df['delivery_time'].max()
 
 st.write(f"**Rata-rata Waktu Pengiriman:** {average_delivery_time:.2f} hari")
 st.write(f"**Waktu Pengiriman Tercepat:** {fastest_delivery_time} hari")
