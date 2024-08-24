@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 st.title("Proyek Analisis Data")
 st.markdown("""
 ### Analisis Data E-Commerce
-Aplikasi ini menampilkan visualisasi dan analisis data dari berbagai dataset yang berkaitan dengan penjualan online.
 """)
 
 # Load Datasets
