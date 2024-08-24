@@ -55,9 +55,3 @@ st.subheader("Raw Data")
 st.dataframe(orders_df)
 """
 
-# Save the code to a .py file
-file_path = '/mnt/data/delivery_time_dashboard.py'
-with open(file_path, 'w') as file:
-    file.write(streamlit_code)
-
-file_path
